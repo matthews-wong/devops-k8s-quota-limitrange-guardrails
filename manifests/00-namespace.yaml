@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: team-a
+  labels:
+    app.kubernetes.io/name: team-a
+    app.kubernetes.io/part-of: quota-guardrails
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: v1.31
