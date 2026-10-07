@@ -19,3 +19,16 @@ make validate
 ```
 
 Needs `kubeconform` and Python 3 with PyYAML.
+
+## Design notes
+
+- The LimitRange default (`100m`/`128Mi` request, `500m`/`256Mi` limit) means a
+  container that forgets `resources` still gets bounded. The sample Deployment
+  sets its own anyway, so it does not depend on admission defaults.
+- `maxLimitRequestRatio` is 4, so a pod cannot request almost nothing and burst
+  to the container max.
+- The quota is checked against `replicas × per-container resources`. Rolling
+  updates briefly add surge pods, so leave headroom beyond what the check
+  requires.
+- The `nginx-unprivileged` image is a stand-in; swap in a real image and keep
+  the pinned tag.
