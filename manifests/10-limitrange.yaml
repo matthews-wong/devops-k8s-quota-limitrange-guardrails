@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: container-defaults
+  namespace: team-a
+  labels:
+    app.kubernetes.io/name: container-defaults
+    app.kubernetes.io/part-of: quota-guardrails
+spec:
+  limits:
+    - type: Container
+      # Applied to containers that omit resources, so nothing runs unbounded.
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi
+      default:
+        cpu: 500m
+        memory: 256Mi
+      min:
+        cpu: 50m
+        memory: 64Mi
+      max:
+        cpu: "1"
+        memory: 1Gi
+      # A limit may be at most 4x its request, which bounds burst overcommit.
+      maxLimitRequestRatio:
+        cpu: "4"
+        memory: "4"
